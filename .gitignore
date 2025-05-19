@@ -1,0 +1,10 @@
+solution*.*
+goal*.*
+solution*/
+goal*/
+example*.*
+example*/
+demo*.*
+demo*/
+node_modules/
+credentials.*
