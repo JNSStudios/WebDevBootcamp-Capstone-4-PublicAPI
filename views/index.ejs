@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JNS Currency Converter</title>
+
+        <!-- Bootstrap Stylesheet Import -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+
+        <!-- Google Fonts Imports -->
+        
+            <!-- Audiowide -->
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+
+
+
+        <!-- Extra Styles Import -->
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+         <nav>
+            <h1 class="header-title audiowide-regular">JNS Currency Converter</h1>
+            <hr>
+        </nav>
+
+        <!-- Currency convert display (has cycle animation) -->
+            <section class="row">
+                <div class="col-5 text-end currAnim from-currency audiowide-regular" style="min-width: 150px; max-width: 150px;"></div>
+                <div class="col-2 text-center currAnim conv-direction audiowide-regular" style="min-width: 150px; max-width: 150px;"></div>
+                <div class="col-5 text-start currAnim to-currency audiowide-regular" style="min-width: 150px; max-width: 150px;"></div>
+            </section>
+            <!-- <% 
+                // console.log(`typeof fromSelection: ${typeof fromSelection}, fromAmount: ${typeof fromAmount}, toSelection: ${typeof toSelection}, toAmount: ${typeof toAmount}, conversionDirection: ${typeof conversionDirection}`);
+            %> -->
+
+            <!-- Conversion section -->
+            <form action="/convert" method="POST">
+            <div class="row mb-3 align-items-center">
+                <!-- Left Currency -->
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <select class="form-select" name="fromSelection" id="fromSelection">
+                            <option <%= fromSelection === "" ? 'selected' : '' %> value="">Select a currency...</option>
+                            <option <%= fromSelection === "AUD" ? 'selected' : '' %> value="AUD">Australian Dollar (A$)</option>
+                            <option <%= fromSelection === "BGN" ? 'selected' : '' %> value="BGN">Bulgarian Lev (лв)</option>
+                            <option <%= fromSelection === "BRL" ? 'selected' : '' %> value="BRL">Brazilian Real (R$)</option>
+                            <option <%= fromSelection === "CAD" ? 'selected' : '' %> value="CAD">Canadian Dollar (C$)</option>
+                            <option <%= fromSelection === "CHF" ? 'selected' : '' %> value="CHF">Swiss Franc (CHF)</option>
+                            <option <%= fromSelection === "CNY" ? 'selected' : '' %> value="CNY">Chinese Renminbi Yuan (CN¥)</option>
+                            <option <%= fromSelection === "CZK" ? 'selected' : '' %> value="CZK">Czech Koruna (Kč)</option>
+                            <option <%= fromSelection === "DKK" ? 'selected' : '' %> value="DKK">Danish Krone (kr)</option>
+                            <option <%= fromSelection === "EUR" ? 'selected' : '' %> value="EUR">Euro (€)</option>
+                            <option <%= fromSelection === "GBP" ? 'selected' : '' %> value="GBP">British Pound (£)</option>
+                            <option <%= fromSelection === "HKD" ? 'selected' : '' %> value="HKD">Hong Kong Dollar (HK$)</option>
+                            <option <%= fromSelection === "HUF" ? 'selected' : '' %> value="HUF">Hungarian Forint (Ft)</option>
+                            <option <%= fromSelection === "IDR" ? 'selected' : '' %> value="IDR">Indonesian Rupiah (Rp)</option>
+                            <option <%= fromSelection === "ILS" ? 'selected' : '' %> value="ILS">Israeli New Sheqel (₪)</option>
+                            <option <%= fromSelection === "INR" ? 'selected' : '' %> value="INR">Indian Rupee (₹)</option>
+                            <option <%= fromSelection === "ISK" ? 'selected' : '' %> value="ISK">Icelandic Króna (kr)</option>
+                            <option <%= fromSelection === "JPY" ? 'selected' : '' %> value="JPY">Japanese Yen (¥)</option>
+                            <option <%= fromSelection === "KRW" ? 'selected' : '' %> value="KRW">South Korean Won (₩)</option>
+                            <option <%= fromSelection === "MXN" ? 'selected' : '' %> value="MXN">Mexican Peso (Mex$)</option>
+                            <option <%= fromSelection === "MYR" ? 'selected' : '' %> value="MYR">Malaysian Ringgit (RM)</option>
+                            <option <%= fromSelection === "NOK" ? 'selected' : '' %> value="NOK">Norwegian Krone (kr)</option>
+                            <option <%= fromSelection === "NZD" ? 'selected' : '' %> value="NZD">New Zealand Dollar (NZ$)</option>
+                            <option <%= fromSelection === "PHP" ? 'selected' : '' %> value="PHP">Philippine Peso (₱)</option>
+                            <option <%= fromSelection === "PLN" ? 'selected' : '' %> value="PLN">Polish Złoty (zł)</option>
+                            <option <%= fromSelection === "RON" ? 'selected' : '' %> value="RON">Romanian Leu (lei)</option>
+                            <option <%= fromSelection === "SEK" ? 'selected' : '' %> value="SEK">Swedish Krona (kr)</option>
+                            <option <%= fromSelection === "SGD" ? 'selected' : '' %> value="SGD">Singapore Dollar (S$)</option>
+                            <option <%= fromSelection === "THB" ? 'selected' : '' %> value="THB">Thai Baht (฿)</option>
+                            <option <%= fromSelection === "TRY" ? 'selected' : '' %> value="TRY">Turkish Lira (₺)</option>
+                            <option <%= fromSelection === "USD" ? 'selected' : '' %> value="USD">United States Dollar ($)</option>
+                            <option <%= fromSelection === "ZAR" ? 'selected' : '' %> value="ZAR">South African Rand (R)</option>
+                        </select>
+                        <input type="number" class="form-control" name="fromAmount" id="fromAmount" placeholder="Enter amount" min="0" step="0.01" value="<%= typeof fromAmount === 'number' ? fromAmount.toFixed(2) : '' %>">
+                    </div>
+                </div>
+                
+                <!-- Checkbox for Conversion Direction -->
+                <div class="col-md-2 text-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="conversionDirection" id="conversionDirection" value="swap" <%= conversionDirection === "swap" ? 'checked' : '' %> >
+                        <label class="form-check-label" for="conversionDirection">
+                            Swap Direction
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Right Currency -->
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <select class="form-select" name="toSelection" id="toSelection">
+                            <option <%= toSelection === "" ? 'selected' : '' %> value="">Select a currency...</option>
+                            <option <%= toSelection === "AUD" ? 'selected' : '' %> value="AUD">Australian Dollar (A$)</option>
+                            <option <%= toSelection === "BGN" ? 'selected' : '' %> value="BGN">Bulgarian Lev (лв)</option>
+                            <option <%= toSelection === "BRL" ? 'selected' : '' %> value="BRL">Brazilian Real (R$)</option>
+                            <option <%= toSelection === "CAD" ? 'selected' : '' %> value="CAD">Canadian Dollar (C$)</option>
+                            <option <%= toSelection === "CHF" ? 'selected' : '' %> value="CHF">Swiss Franc (CHF)</option>
+                            <option <%= toSelection === "CNY" ? 'selected' : '' %> value="CNY">Chinese Renminbi Yuan (CN¥)</option>
+                            <option <%= toSelection === "CZK" ? 'selected' : '' %> value="CZK">Czech Koruna (Kč)</option>
+                            <option <%= toSelection === "DKK" ? 'selected' : '' %> value="DKK">Danish Krone (kr)</option>
+                            <option <%= toSelection === "EUR" ? 'selected' : '' %> value="EUR">Euro (€)</option>
+                            <option <%= toSelection === "GBP" ? 'selected' : '' %> value="GBP">British Pound (£)</option>
+                            <option <%= toSelection === "HKD" ? 'selected' : '' %> value="HKD">Hong Kong Dollar (HK$)</option>
+                            <option <%= toSelection === "HUF" ? 'selected' : '' %> value="HUF">Hungarian Forint (Ft)</option>
+                            <option <%= toSelection === "IDR" ? 'selected' : '' %> value="IDR">Indonesian Rupiah (Rp)</option>
+                            <option <%= toSelection === "ILS" ? 'selected' : '' %> value="ILS">Israeli New Sheqel (₪)</option>
+                            <option <%= toSelection === "INR" ? 'selected' : '' %> value="INR">Indian Rupee (₹)</option>
+                            <option <%= toSelection === "ISK" ? 'selected' : '' %> value="ISK">Icelandic Króna (kr)</option>
+                            <option <%= toSelection === "JPY" ? 'selected' : '' %> value="JPY">Japanese Yen (¥)</option>
+                            <option <%= toSelection === "KRW" ? 'selected' : '' %> value="KRW">South Korean Won (₩)</option>
+                            <option <%= toSelection === "MXN" ? 'selected' : '' %> value="MXN">Mexican Peso (Mex$)</option>
+                            <option <%= toSelection === "MYR" ? 'selected' : '' %> value="MYR">Malaysian Ringgit (RM)</option>
+                            <option <%= toSelection === "NOK" ? 'selected' : '' %> value="NOK">Norwegian Krone (kr)</option>
+                            <option <%= toSelection === "NZD" ? 'selected' : '' %> value="NZD">New Zealand Dollar (NZ$)</option>
+                            <option <%= toSelection === "PHP" ? 'selected' : '' %> value="PHP">Philippine Peso (₱)</option>
+                            <option <%= toSelection === "PLN" ? 'selected' : '' %> value="PLN">Polish Złoty (zł)</option>
+                            <option <%= toSelection === "RON" ? 'selected' : '' %> value="RON">Romanian Leu (lei)</option>
+                            <option <%= toSelection === "SEK" ? 'selected' : '' %> value="SEK">Swedish Krona (kr)</option>
+                            <option <%= toSelection === "SGD" ? 'selected' : '' %> value="SGD">Singapore Dollar (S$)</option>
+                            <option <%= toSelection === "THB" ? 'selected' : '' %> value="THB">Thai Baht (฿)</option>
+                            <option <%= toSelection === "TRY" ? 'selected' : '' %> value="TRY">Turkish Lira (₺)</option>
+                            <option <%= toSelection === "USD" ? 'selected' : '' %> value="USD">United States Dollar ($)</option>
+                            <option <%= toSelection === "ZAR" ? 'selected' : '' %> value="ZAR">South African Rand (R)</option>                        
+                        </select>
+                        <input type="number" class="form-control" name="toAmount" id="toAmount" placeholder="Enter amount" min="0" step="0.01" disabled value="<%= typeof toAmount === 'number' ? toAmount.toFixed(2) : '' %>">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col text-center">
+                    <button type="submit" class="btn btn-primary">Convert</button>
+                </div>
+            </div>
+        </form>
+
+        <% if (locals.result) { %>
+            <div class="row mb-3">
+                <div class="col text-center">
+                    <h1 class="result-text audiowide-regular"><%= locals.result %></h1>
+                    <p>Conversion rate: <%= locals.conversionRate %></p>
+                </div>
+            </div>
+            <br><br><br>
+        <% } %>
+
+
+
+
+        <footer>
+            <div class="container">
+                <p>Made in 2025</p>
+                <p>Currency conversion API: https://frankfurter.dev/</p>
+            </div>
+        </footer>
+
+        <!-- jQuery Script Import -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap Script Import -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+        <!-- Extra Script Import -->
+        <script src="script.js"></script>
+    </body>
+</html>
